@@ -59,9 +59,67 @@ npx playwright show-report
 - Combined execution time: 11.2 seconds
 - Verification date: 28 October 2026
 
+
+## Coaches Admin Route Tests
+
+| Test ID | Test Scenario | Expected Result |
+|---|---|---|
+| ADM-001 | Open `/admin` | Route responds without a server error and renders a non-empty page |
+| ADM-002 | Access `/admin` without authentication | User is redirected to login or shown an access-denied message |
+
+Run only the admin route tests:
+
+```bash
+npx playwright test tests/admin.spec.js --project=chromium
+```
+
+Run all tests in Chromium:
+
+```bash
+npx playwright test --project=chromium
+```
+
+View the HTML report:
+
+```bash
+npx playwright show-report
+```
+
+**Note:** Run these tests before reporting results. Record actual pass/fail outcomes; do not treat unexecuted tests as passed.
+
+
 ## Notes
 - Tests cover basic public-page navigation and visibility checks.
 - Login credentials and account creation are not used.
 - The Day 1 CoinsLive Explore test is separate from the five Coaches MVP smoke tests.
 - Test results may vary depending on network conditions and website availability.
  
+ 
+## Coaches Admin Route Tests
+
+| Test ID | Scenario | Expected Result |
+|---|---|---|
+| ADM-001 | Open `/admin` route | Route responds without a server error and renders a page |
+| ADM-002 | Open `/admin` without authentication | Authentication gate is detected before admin content is shown |
+
+### Run Admin Tests
+
+Run the admin route tests in Chromium:
+
+```bash
+npx playwright test tests/admin.spec.js --project=chromium
+```
+
+### Run All Tests in Chromium
+
+```bash
+npx playwright test --project=chromium
+```
+
+### View the HTML Report
+
+```bash
+npx playwright show-report
+```
+
+**Note:** Test results should be reported only after execution. The admin route tests have passed locally; the complete suite must be run separately.
