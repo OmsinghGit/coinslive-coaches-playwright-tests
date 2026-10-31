@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium --workers=1",
+    "test:admin:routes": "playwright test tests/admin.spec.js --project=chromium --workers=1",
+    "test:admin:sidebar": "playwright test tests/admin-sidebar.spec.js --project=chromium --workers=1",
+    "test:report": "playwright show-report"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
