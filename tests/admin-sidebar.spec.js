@@ -127,6 +127,8 @@ test('ADM-017: Workshop Insights', async ({ page }) => {
 test('ADM-018: Broadcast module availability', async ({ page }) => {
   await page.getByText('Broadcast', { exact: true }).click();
 
+  await expect(page).toHaveURL(`${BASE_URL}/admin/broadcast`);
+
   await expect(
     page.getByText('Setup', { exact: true })
   ).toBeVisible();
@@ -156,4 +158,43 @@ test('ADM-019: New Chat interface and composer state', async ({ page }) => {
   );
 });
 
-  
+// ADM-020: New Chat interface and composer state
+
+test('ADM-020: New Chat and Custom Keys navigation', async ({ page }) => {
+  await page.getByText('New Chat', { exact: true }).click();
+
+  await expect(page).toHaveURL(/\/chat\//);
+
+  await expect(
+    page.getByRole('heading', {
+      name: 'How can I help?',
+      exact: true,
+    })
+  ).toBeVisible();
+
+  await expect(
+    page.getByText('Connect AI', { exact: true })
+  ).toBeVisible();
+
+  await page.getByRole('button', {
+    name: 'Custom keys',
+    exact: true,
+  }).click();
+
+  await expect(page).toHaveURL(/\/settings\/model\/?$/);
+
+  await expect(
+    page.getByText('Add a model provider', { exact: true })
+  ).toBeVisible();
+
+  await expect(
+    page.getByRole('button', {
+      name: 'Add provider',
+      exact: true,
+    })
+  ).toBeVisible();
+});
+
+
+
+
