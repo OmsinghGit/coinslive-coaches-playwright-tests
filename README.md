@@ -1,50 +1,42 @@
+# CoinsLive Playwright Test Automation
 
-# CoinsLive Coaches — Playwright Test Automation
+A JavaScript and Playwright project for automating selected CoinsLive public-site, Adhyayan, and Coaches Admin browser tests.
 
-A browser automation project built using **Playwright and JavaScript** to validate selected user journeys, public website behaviour, and Coaches Admin modules of the CoinsLive platform.
-
-The project combines automated UI validation, authenticated route testing, and structured test coverage to identify usability and functional issues.
+The suite covers public-page smoke checks, Adhyayan room navigation and responsive layout, Admin routes, and selected Admin sidebar modules. Tests run against deployed websites and depend on their current content and availability.
 
 ## Project Overview
 
-This repository contains automated test cases for:
-
-- Public website smoke testing
-- Coaches Admin route validation
-- Admin dashboard and sidebar modules
-- UI visibility and interaction checks
-- Authenticated browser testing
-
-The tests are organized by application area to make them easier to maintain, execute, and extend.
+| Area | Coverage |
+|---|---|
+| Public website | Explore, Coaches MVP homepage, courses, enrollment sign-in, and workshops |
+| Adhyayan | Room details, join and host sign-in redirects, host profile navigation, browser-back navigation, and horizontal overflow at selected viewport sizes |
+| Coaches Admin | Unauthenticated route behavior and selected dashboard/sidebar modules |
 
 ## Tech Stack
 
 | Technology | Purpose |
 |---|---|
 | JavaScript | Test implementation |
-| Node.js | Runtime environment |
-| Playwright | Browser automation and testing |
-| Chromium | Browser used for the verified test execution |
+| Node.js and npm | Runtime and dependency management |
+| Playwright Test | Browser automation, assertions, and reporting |
+| Chromium, Firefox, WebKit | Configured browser projects |
 | Git | Version control |
-| GitHub | Source code management |
 
 ## Project Structure
 
 ```text
 playwright-practise/
-│
 ├── tests/
-│   ├── coinslive.spec.js          # Public website smoke tests
-│   ├── admin.spec.js              # Admin route validation
-│   └── admin-sidebar.spec.js      # Admin sidebar module tests
-│
+│   ├── admin-sidebar.spec.js
+│   ├── admin.spec.js
+│   ├── adhyayan-navigation.spec.js
+│   ├── adhyayan-responsive.spec.js
+│   └── coinslive.spec.js
 ├── playwright/
 │   └── .auth/
-│       └── admin.json             # Local authentication state
-│
-├── test-results/                  # Generated test artifacts
-├── playwright-report/              # HTML test report
-│
+│       └── admin.json            # Local authentication state; do not commit
+├── test-results/                 # Generated test output and artifacts
+├── playwright-report/            # Generated HTML report
 ├── playwright.config.js
 ├── package.json
 ├── package-lock.json
@@ -52,63 +44,108 @@ playwright-practise/
 └── README.md
 ```
 
-**Security note:** The `playwright/.auth/` directory contains local authentication state and must remain excluded from Git. Never commit passwords, session files, access tokens, or other sensitive credentials.
+The `.gitignore` excludes `playwright/.auth/`, generated reports, test results, and environment files. Never commit or share authentication state, passwords, tokens, or other credentials.
 
 ## Test Coverage
 
-The current automated suite contains **20 test cases** across three test files.
+The repository currently defines **33 test cases** across five spec files. The Playwright configuration has three browser projects, so an unfiltered full run schedules each test in Chromium, Firefox, and WebKit.
 
-| Test Suite | Test IDs | Test Cases |
+| Test suite | File | Test cases |
 |---|---|---:|
-| Public Website Tests | Existing public smoke tests | 6 |
-| Coaches Admin Route Tests | ADM-001 to ADM-002 | 2 |
-| Admin Sidebar Tests | ADM-008 to ADM-019 | 12 |
-| **Total** | | **20** |
+| Public website | `tests/coinslive.spec.js` | 6 |
+| Coaches Admin routes | `tests/admin.spec.js` | 2 |
+| Coaches Admin sidebar | `tests/admin-sidebar.spec.js` | 13 |
+| Adhyayan navigation | `tests/adhyayan-navigation.spec.js` | 7 |
+| Adhyayan responsive layout | `tests/adhyayan-responsive.spec.js` | 5 |
+| **Total** | | **33** |
 
-### 1. Public Website Tests
+### Public Website Tests
 
 **File:** `tests/coinslive.spec.js`
 
-Contains six smoke tests covering selected public-facing website behaviour.
+| Coverage |
+|---|
+| Explore page heading |
+| Coaches MVP homepage heading and course link |
+| Browse courses navigation to the Courses section |
+| Course details page and enrollment link |
+| Enrollment redirect to sign-in |
+| Workshops page Upcoming and Archived sections |
 
-### 2. Coaches Admin Route Tests
+### Coaches Admin Route Tests
 
 **File:** `tests/admin.spec.js`
 
-Contains two authenticated route checks for the Coaches Admin area.
+| Test ID | Coverage |
+|---|---|
+| ADM-001 | `/admin` returns an HTTP response below status 500 and renders a non-empty body |
+| ADM-002 | Unauthenticated `/admin` access presents an authentication gate rather than Admin content |
 
-### 3. Coaches Admin Sidebar Tests
+The base URL can be overridden with the `COACHES_BASE_URL` environment variable. Otherwise, tests use `https://coinslive-coaches-mvp.vercel.app`.
+
+### Coaches Admin Sidebar Tests
 
 **File:** `tests/admin-sidebar.spec.js`
 
-The following Admin modules are covered:
+These tests use the saved `playwright/.auth/admin.json` storage state.
 
-| Test ID | Module | Validation |
-|---|---|---|
-| ADM-008 | Home Dashboard | Dashboard visibility and no-workspace state |
-| ADM-009 | Landing | Landing page availability |
-| ADM-010 | SEO | SEO page and workspace setup access |
-| ADM-011 | Courses | Workspace-required state |
-| ADM-012 | Workshops | Workshops section visibility |
-| ADM-013 | Email Automations | Automation section and canvas visibility |
-| ADM-014 | Email Templates | Workspace-required state |
-| ADM-015 | Insights | Insights dashboard visibility |
-| ADM-016 | Leads | Leads page and filter controls |
-| ADM-017 | Workshop Insights | Workshop Insights page visibility |
-| ADM-018 | Broadcast | Broadcast section visibility |
-| ADM-019 | New Chat | Chat interface and composer state |
+| Test ID | Module or behavior |
+|---|---|
+| ADM-008 | Admin dashboard and workspace setup link |
+| ADM-009 | Landing page availability |
+| ADM-010 | SEO setup navigation to workspace setup |
+| ADM-011 | Courses module empty/workspace-required state |
+| ADM-012 | Workshops module setup state |
+| ADM-013 | Email Automations canvas availability |
+| ADM-014 | Email Templates workspace-required state |
+| ADM-015 | Insights dashboard state |
+| ADM-016 | Leads heading and filter labels |
+| ADM-017 | Workshop Insights navigation |
+| ADM-018 | Broadcast navigation and setup state |
+| ADM-019 | New Chat interface and disabled composer state |
+| ADM-020 | New Chat and Custom Keys navigation |
 
-The tests validate the specific UI conditions and behaviours defined in their assertions. A passing test does not establish that every feature on a page is fully functional.
+These checks cover the assertions in the tests; they do not establish that every feature in each module is fully functional.
+
+### Adhyayan Navigation Tests
+
+**File:** `tests/adhyayan-navigation.spec.js`
+
+| Test ID | Coverage |
+|---|---|
+| ADH-NAV-004 | Room join action points to sign-in with the room destination |
+| ADH-NAV-005 | Room title, status, topic, learning goal, and description are visible |
+| ADH-NAV-006 | Host profile link has the expected destination |
+| ADH-NAV-007 | Hosting a study session redirects a signed-out visitor to sign-in with `/adhyayan/new` as the destination |
+| ADH-NAV-008 | Host profile link opens the expected profile route |
+| ADH-NAV-009 | Joining redirects to sign-in and preserves the room destination |
+| ADH-NAV-010 | Browser back returns from the room to the Adhyayan listing |
+
+### Adhyayan Responsive Tests
+
+**File:** `tests/adhyayan-responsive.spec.js`
+
+The listing page is checked for horizontal overflow at five viewport sizes:
+
+| Viewport | Width | Height |
+|---|---:|---:|
+| Mobile-360 | 360 | 800 |
+| Mobile-390 | 390 | 844 |
+| Tablet-768 | 768 | 1024 |
+| Laptop-1366 | 1366 | 768 |
+| Desktop-1920 | 1920 | 1080 |
+
+These tests check document width against viewport width and save screenshots under `test-results/`. They do not constitute a complete visual or accessibility audit.
 
 ## Prerequisites
 
-Make sure the following are installed:
+Install:
 
 - Node.js
 - npm
 - Git
 
-Verify your installations:
+Check the installed versions:
 
 ```bash
 node --version
@@ -118,53 +155,45 @@ git --version
 
 ## Installation and Setup
 
-### 1. Clone the repository
+Clone the repository and enter its directory:
 
 ```bash
 git clone https://github.com/OmsinghGit/coinslive-coaches-playwright-tests.git
-```
-
-### 2. Navigate to the project
-
-```bash
 cd coinslive-coaches-playwright-tests
 ```
 
-### 3. Install dependencies
+Install project dependencies and Playwright browsers:
 
 ```bash
 npm install
+npx playwright install
 ```
 
-### 4. Install Playwright browsers
+To install only Chromium:
 
 ```bash
-npx playwright install
+npx playwright install chromium
 ```
 
 ## Authentication Setup
 
-The Admin test suite requires an authenticated browser session.
+The Admin sidebar tests require an authorized browser session saved at `playwright/.auth/admin.json`. This file is ignored by Git and must be generated locally.
 
-Authentication state is stored locally and excluded from source control.
+In PowerShell, create the directory if needed:
 
-### Generate authentication state
-
-Run:
-
-```bash
+```powershell
 New-Item -ItemType Directory -Force playwright/.auth
 ```
 
-Then start Playwright Codegen:
+Start Playwright Codegen:
 
-```bash
+```powershell
 npx playwright codegen --save-storage=playwright/.auth/admin.json https://coinslive-coaches-mvp.vercel.app/admin
 ```
 
-Sign in using an authorized test account in the opened browser window. Close the browser after authentication so the storage state can be saved.
+Sign in with an authorized test account in the opened browser, then close the browser so Playwright can save the storage state.
 
-Verify the generated file:
+Check that the file exists:
 
 ```powershell
 Test-Path playwright/.auth/admin.json
@@ -176,105 +205,129 @@ Expected output:
 True
 ```
 
-**Important:** Authentication sessions may expire. Generate a fresh session when required. Never share or commit the generated authentication file.
+Authentication sessions can expire. Generate a fresh state when required. Never commit, publish, or share the generated file.
 
-## Running the Tests
+## Running Tests
 
-### Run the complete test suite
+Run all test files in all configured browser projects:
 
 ```bash
 npm test
 ```
 
-### Run tests in Chromium
+Run all tests in Chromium with one worker:
 
 ```bash
 npm run test:chromium
 ```
 
-### Run Admin route tests only
+Run the Adhyayan navigation tests in Chromium:
+
+```bash
+npx playwright test tests/adhyayan-navigation.spec.js --project=chromium --workers=1
+```
+
+Run the Adhyayan responsive tests in Chromium:
+
+```bash
+npx playwright test tests/adhyayan-responsive.spec.js --project=chromium --workers=1
+```
+
+Run a specific test by title:
+
+```bash
+npx playwright test tests/adhyayan-navigation.spec.js --project=chromium --grep "ADH-NAV-009"
+```
+
+Run the Admin route tests in Chromium:
 
 ```bash
 npm run test:admin:routes
 ```
 
-### Run Admin sidebar tests only
+Run the Admin sidebar tests in Chromium:
 
 ```bash
 npm run test:admin:sidebar
 ```
 
-### Open the HTML test report
+Open the HTML report after a run:
 
 ```bash
 npm run test:report
+```
+
+To set a different Coaches MVP base URL in PowerShell:
+
+```powershell
+$env:COACHES_BASE_URL = "https://your-coaches-test-environment"
+npm run test:admin:routes
 ```
 
 ## Available npm Scripts
 
 | Script | Description |
 |---|---|
-| `npm test` | Executes the configured Playwright test suite |
-| `npm run test:chromium` | Runs all tests in Chromium with one worker |
-| `npm run test:admin:routes` | Executes Admin route tests in Chromium |
-| `npm run test:admin:sidebar` | Executes Admin sidebar tests in Chromium |
+| `npm test` | Runs the configured Playwright suite |
+| `npm run test:chromium` | Runs the suite in Chromium with one worker |
+| `npm run test:admin:routes` | Runs `tests/admin.spec.js` in Chromium with one worker |
+| `npm run test:admin:sidebar` | Runs `tests/admin-sidebar.spec.js` in Chromium with one worker |
 | `npm run test:report` | Opens the generated Playwright HTML report |
+
+## Playwright Configuration
+
+The configuration in `playwright.config.js`:
+
+- Uses `tests/` as the test directory.
+- Enables fully parallel execution by default.
+- Uses one worker in CI and allows two retries in CI.
+- Uses the HTML reporter.
+- Captures a trace on the first retry.
+- Defines Chromium, Firefox, and WebKit browser projects.
+
+Tests target live deployed websites. A run can therefore be affected by service availability, network conditions, authentication expiration, or changes to page content.
 
 ## Test Execution Results
 
-**Latest verified local Chromium execution:**
+**Current verification status:** Tests were not run while preparing this README. No pass, fail, flaky, or skipped result is claimed here.
 
 | Metric | Result |
 |---|---:|
-| Total Tests | 20 |
-| Passed | 20 |
-| Failed | 0 |
-| Flaky | 0 |
-| Skipped | 0 |
+| Test cases currently defined | 33 |
+| Browser projects configured | 3 |
+| Test executions in this documentation session | Not run |
+| Passed / Failed / Flaky / Skipped | Not verified |
 
-<badge color="success">20 / 20 Passed</badge>
-
-The verified execution included:
-
-- 6 Public Website tests
-- 2 Coaches Admin route tests
-- 12 Admin sidebar tests
-
-**Execution environment:** Local machine, Chromium browser.
-
-This result represents the recorded Chromium test run. Firefox, WebKit, and CI execution should be verified separately before claiming cross-browser or CI coverage.
+An unfiltered full run schedules 33 test cases in each of the three configured browser projects. CI retries may result in additional attempts. Run the tests and inspect the generated Playwright report for actual execution results.
 
 ## Testing Limitations
 
-The following areas require additional validation:
-
-- Workspace-dependent features could not be fully tested because a workspace was not created during the review.
-- New Chat AI response generation was not tested because an AI provider was not configured.
-- Leads filter behaviour requires further verification with suitable lead data.
-- Additional browser testing is needed before making cross-browser compatibility claims.
-
-These are testing limitations, not confirmed application defects.
+- Public-site and Adhyayan tests depend on live CoinsLive websites and current page content.
+- Admin sidebar tests require a valid local authentication state.
+- Admin module tests verify specific visible states and navigation; they do not verify every feature or backend operation.
+- The Adhyayan responsive suite checks horizontal overflow at the listed viewport sizes only.
+- Responsive screenshots use fixed filenames. Since browser projects can run in parallel, screenshots for the same viewport may be overwritten by another project.
+- Cross-browser execution is configured, but compatibility should only be reported after the corresponding browser tests have actually run.
 
 ## Test Automation Practices
 
-- Tests are organized into separate specification files by application area.
-- Authenticated tests use Playwright storage state.
-- Sensitive authentication data is excluded from version control.
-- Test IDs support traceability between automated tests and QA documentation.
-- Assertions validate observable UI states and interactions.
-- Inconclusive behaviour is documented separately instead of being reported as a confirmed defect.
+- Tests are grouped by application area in separate specification files.
+- User-facing controls are located with Playwright role-based locators where practical.
+- URL assertions parse paths and query parameters for redirect checks.
+- Admin authentication state is local and excluded from version control.
+- Test results should be reported from an actual Playwright run rather than inferred from the number of tests in the repository.
 
 ## Future Improvements
 
-- Expand functional test coverage for workspace-dependent workflows.
-- Add more interaction and form-validation scenarios.
-- Automate additional end-to-end Admin workflows.
-- Integrate test execution into a CI/CD pipeline.
-- Extend and verify browser coverage across Chromium, Firefox, and WebKit.
+- Use isolated screenshot paths for each test and browser project.
+- Add CI execution and retain its HTML report and traces as artifacts.
+- Expand functional verification beyond visible states for workspace-dependent Admin modules.
+- Add further responsive, accessibility, and error-state coverage.
+- Record dated test-run results only after verifying the corresponding report.
 
 ## Disclaimer
 
-This project represents focused browser automation and QA validation of selected CoinsLive Coaches application areas. Test results are specific to the application state, test account, browser, and execution environment used during testing.
+This project provides focused browser automation for selected CoinsLive experiences. Results apply only to the tested application state, test account, browser, and execution environment. A passing test does not guarantee that all application features are defect-free.
 
 ---
 
