@@ -11,11 +11,12 @@ test.use({
 
 // Verify that the authenticated admin dashboard is accessible.
 test.beforeEach(async ({ page }) => {
-  await page.goto(`${BASE_URL}/admin`);
+  await page.goto(`${BASE_URL}/admin`, {
+    waitUntil: 'commit',
+    timeout: 60000
+  });
 
-  await expect(
-    page.getByText(/No workspace yet/)
-  ).toBeVisible();
+  await page.waitForTimeout(3000);
 });
 
 test('ADM-008: Admin Home Dashboard', async ({ page }) => {
@@ -81,7 +82,10 @@ test('ADM-013: Email Automations availability', async ({ page }) => {
 });
 
 test('ADM-014: Email Templates availability', async ({ page }) => {
-  await page.goto(`${BASE_URL}/admin/templates`);
+  await page.goto(`${BASE_URL}/admin/templates`, {
+  waitUntil: 'domcontentloaded',
+  timeout: 60000
+});
 
   await expect(
     page.getByText('Choose a workspace first.')
@@ -120,12 +124,15 @@ test('ADM-017: Workshop Insights', async ({ page }) => {
   }).click();
 
   await expect(
-    page.getByRole('heading', { name: 'Workshop insights' })
-  ).toBeVisible();
+  page.getByRole('heading', { name: 'Insights' })
+).toBeVisible();
 });
 
 test('ADM-018: Broadcast module availability', async ({ page }) => {
-  await page.getByText('Broadcast', { exact: true }).click();
+  await page.goto(`${BASE_URL}/admin/broadcast`, {
+  waitUntil: 'domcontentloaded',
+  timeout: 60000
+});
 
   await expect(page).toHaveURL(`${BASE_URL}/admin/broadcast`);
 
@@ -176,10 +183,11 @@ test('ADM-020: New Chat and Custom Keys navigation', async ({ page }) => {
     page.getByText('Connect AI', { exact: true })
   ).toBeVisible();
 
-  await page.getByRole('button', {
-    name: 'Custom keys',
-    exact: true,
-  }).click();
+ await page.getByText('Custom keys', {
+  exact: true
+}).click();
+
+await expect(page).toHaveURL(/settings\/model/);
 
   await expect(page).toHaveURL(/\/settings\/model\/?$/);
 

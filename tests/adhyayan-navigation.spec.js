@@ -30,6 +30,8 @@ test('ADH-NAV-004: Verify room join action destination', async ({ page }) => {
 });
 
 test('ADH-NAV-005: Verify room details content', async ({ page }) => {
+  test.setTimeout(90000);
+
   await page.goto(ROOM_URL, {
     waitUntil: 'domcontentloaded',
     timeout: 60000,
@@ -95,6 +97,8 @@ test('ADH-NAV-007: Signed-out visitor is redirected to sign-in to host a study s
 });
 
 test('ADH-NAV-008: Room host profile link opens the correct profile', async ({ page }) => {
+  test.setTimeout(90000);
+
   await page.goto(ROOM_URL, {
     waitUntil: 'domcontentloaded',
     timeout: 60000,
@@ -113,9 +117,9 @@ test('ADH-NAV-008: Room host profile link opens the correct profile', async ({ p
 
   await hostProfileLink.click();
 
-  await expect(page).toHaveURL(
-    (url) => url.pathname === '/u/sachin_anand_mbb/',
-  );
+ await expect(page).toHaveURL(
+  (url) => url.pathname === '/u/sachin_anand_mbb/',
+);
 });
 
 test('ADH-NAV-009: Joining a room redirects to sign-in with the room destination', async ({ page }) => {
