@@ -76,24 +76,29 @@ test('ADH-NAV-006: Verify room host profile link destination', async ({ page }) 
   );
 });
 
-test('ADH-NAV-007: Signed-out visitor is redirected to sign-in to host a study session', async ({ page }) => {
-  await page.goto(`https://www.coinslive.in${ADHYAYAN_PATH}`, {
+test('ADH-NAV-007: Signed-out visitor is redirected to sign-in to host a peer study room', async ({ page }) => {
+  await page.goto('https://www.coinslive.in/spaces/', {
     waitUntil: 'domcontentloaded',
     timeout: 60000,
   });
 
   const hostLink = page.getByRole('link', {
-    name: 'Host a study session',
-    exact: true,
+    name: /Host a peer study room/,
   });
 
   await expect(hostLink).toBeVisible();
+  await expect(hostLink).toHaveAttribute(
+    'href',
+    '/sign-in/?redirect_url=%2Fadhyayan%2Fnew%2F',
+  );
+
   await hostLink.click();
 
-  await expect(page).toHaveURL((url) => url.pathname === '/sign-in/');
+  await expect(page).toHaveURL(url => url.pathname === '/sign-in/');
 
   const signInUrl = new URL(page.url());
-  expect(signInUrl.searchParams.get('redirect_url')).toBe('/adhyayan/new');
+
+  expect(signInUrl.searchParams.get('redirect_url')).toBe('/adhyayan/new/');
 });
 
 test('ADH-NAV-008: Room host profile link opens the correct profile', async ({ page }) => {
