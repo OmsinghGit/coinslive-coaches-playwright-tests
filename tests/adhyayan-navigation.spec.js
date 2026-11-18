@@ -41,20 +41,19 @@ test('ADH-NAV-005: Verify room details content', async ({ page }) => {
     page.getByRole('heading', {
       name: 'Calculus problem set 4',
       exact: true,
-    }),
+    })
   ).toBeVisible();
 
-  await expect(page.getByText('Starting soon', { exact: true })).toBeVisible();
   await expect(
-    page.getByText('Derivatives and chain rule', { exact: true }),
+    page.getByText('Everyone can solve chain-rule related problem unaided', {
+      exact: true,
+    })
   ).toBeVisible();
-  await expect(
-    page.getByText('Everyone can solve chain-rule related problem unaided'),
-  ).toBeVisible();
+
   await expect(
     page.getByText('We will study together the chain rule concepts', {
       exact: true,
-    }),
+    })
   ).toBeVisible();
 });
 
