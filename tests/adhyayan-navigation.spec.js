@@ -180,6 +180,8 @@ test('ADH-NAV-010: Browser back returns from room to Adhyayan listing', async ({
 
   await expect(page).toHaveURL((url) => url.pathname === ADHYAYAN_PATH);
   await expect(
-    page.getByRole('heading', { name: 'Adhyayan', exact: true }),
-  ).toBeVisible();
+  page.getByRole('heading', { name: 'Explore Adhyayan', exact: true }),
+).toBeVisible();
+
+await expect(roomLink).toBeVisible();
 });
