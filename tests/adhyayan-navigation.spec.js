@@ -185,3 +185,39 @@ test('ADH-NAV-010: Browser back returns from room to Adhyayan listing', async ({
 
 await expect(roomLink).toBeVisible();
 });
+
+test('ADH-NAV-010: Navigate back from room details to Adhyayan', async ({ page }) => {
+  // Open the room details page
+  await page.goto(
+    'https://www.coinslive.in/adhyayan/qa-automation-adh-e2e-test-1794907159113-lez97r/',
+    {
+      waitUntil: 'domcontentloaded',
+      timeout: 60000,
+    }
+  );
+
+  // Verify room details page is loaded
+  await expect(
+    page.getByRole('heading', { name: 'QA Automation ADH E2E Test' })
+  ).toBeVisible();
+
+  // Navigate back
+  await page.goBack({
+    waitUntil: 'domcontentloaded',
+    timeout: 60000,
+  });
+
+  // Verify Adhyayan exploration page
+  await expect(page).toHaveURL(/\/adhyayan\/?$/);
+
+  await expect(
+    page.getByRole('heading', { name: 'Explore Adhyayan' })
+  ).toBeVisible();
+
+  // Verify room listing is visible
+  await expect(
+    page.getByRole('link', { name: /QA Automation ADH E2E Test/i })
+  ).toBeVisible();
+
+  console.log('PASS: Back navigation returned to Adhyayan exploration page.');
+});
