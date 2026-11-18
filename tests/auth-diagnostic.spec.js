@@ -35,3 +35,4 @@ test('Diagnose CoinsLive authentication across pages', async ({ browser }) => {
 
   await context.close();
 });
+
